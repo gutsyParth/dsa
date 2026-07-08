@@ -4,11 +4,16 @@ public:
     // Encodes a list of strings to a single string.
     string encode(vector<string> &strs)
     {
-        string ans = "";
+        string ans = to_string(strs.size()) + "#";
 
         for (auto x : strs)
         {
-            ans += "#" + x;
+            ans += x.size() + "#";
+        }
+
+        for (auto x : strs)
+        {
+            ans += x;
         }
 
         return ans;
@@ -17,23 +22,50 @@ public:
     // Decodes a single string to a list of strings.
     vector<string> decode(string s)
     {
-        vector<string> ans;
+        int how_many = 0;
 
         int i = 0;
-        int n = s.size();
 
-        while (i < n)
+        while (s[i] != '#')
         {
-            string temp = "";
+            how_many = how_many * 10 + (s[i] - '0');
 
             i += 1;
-            while (i < n && s[i] != '#')
+        }
+
+        vector<string> ans;
+        vector<int> lengths;
+
+        while (how_many)
+        {
+            i += 1;
+
+            int count = 0;
+
+            while (s[i] != '#')
             {
-                temp += s[i];
+                count = count * 10 + (s[i] - '0');
                 i += 1;
             }
 
+            lengths.push_back(count);
+
+            how_many--;
+        }
+
+        i += 1;
+
+        for (auto x : lengths)
+        {
+            string temp = "";
+            for (int j = i; j < i + x; j++)
+            {
+                temp += s[j];
+            }
+
             ans.push_back(temp);
+
+            i += x;
         }
 
         return ans;
