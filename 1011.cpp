@@ -13,8 +13,8 @@ public:
         while (st <= en)
         {
             mid = st + (en - st) / 2;
-            int cur = 1;
-            int num_days = 0;
+            int cur = 0;
+            int num_days = 1;
             for (int i = 0; i < weights.size(); i++)
             {
                 if (cur + weights[i] > mid)
