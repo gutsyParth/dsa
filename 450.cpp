@@ -1,45 +1,60 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
 class Solution
 {
-public:
-    TreeNode *deleteNode(TreeNode *root, int key)
+    /*
+    One step right and then always left
+    */
+public
+    int successor(TreeNode root)
     {
-        if (root == nullptr)
-        {
-            return root;
-        }
+        root = root.right;
+        while (root.left != null)
+            root = root.left;
+        return root.val;
+    }
 
-        if (root->val < key)
-        {
-            root->right = deleteNode(root->right, key);
-        }
-        else if (root->val > key)
-        {
-            root->left = deleteNode(root->left, key);
-        }
+    /*
+    One step left and then always right
+    */
+public
+    int predecessor(TreeNode root)
+    {
+        root = root.left;
+        while (root.right != null)
+            root = root.right;
+        return root.val;
+    }
+
+public
+    TreeNode deleteNode(TreeNode root, int key)
+    {
+        if (root == null)
+            return null;
+
+        // delete from the right subtree
+        if (key > root.val)
+            root.right = deleteNode(root.right, key);
+        // delete from the left subtree
+        else if (key < root.val)
+            root.left = deleteNode(root.left, key);
+        // delete the current node
         else
         {
-            if (root->left == nullptr && root->right == nullptr)
+            // the node is a leaf
+            if (root.left == null && root.right == null)
+                root = null;
+            // the node is not a leaf and has a right child
+            else if (root.right != null)
             {
-                return nullptr;
+                root.val = successor(root);
+                root.right = deleteNode(root.right, root.val);
             }
-            else if (root->right == nullptr)
+            // the node is not a leaf, has no right child, and has a left child
+            else
             {
-                return root->left;
+                root.val = predecessor(root);
+                root.left = deleteNode(root.left, root.val);
             }
-            else if ()
         }
-
         return root;
     }
-};
+}
